@@ -15,6 +15,7 @@ Plain HTML, CSS and JavaScript. No build step, no dependencies.
 | `fonts/` | The site fonts, bundled so nothing loads from Google |
 | `logo/` | Logo files: `logo-mark.svg`, `avatar.svg` (round-crop friendly), PNG exports and horizontal lockups for light and dark backgrounds |
 | `preview/` | Single-file preview and the upload zip, made by `tools/build.py` |
+| `HOSTING.md` | Where to host it, costs, China notes, step-by-step for an agent, and the message to send Daniel |
 | `img/` | The six live photos (WebP) |
 | `img-candidates/` | The six unused alternatives, ready to swap in |
 | `IMAGE-PROMPTS.md` | The prompts the photos were generated from |
@@ -27,6 +28,8 @@ python3 -m http.server 8080
 ```
 
 ## Host it free on Cloudflare Pages
+
+Full guide, costs and the China caveat: see `HOSTING.md`.
 
 The site is plain files with no build step, and it makes no requests to other websites (fonts and photos are bundled),
 so it also loads where Google is blocked, such as mainland China.

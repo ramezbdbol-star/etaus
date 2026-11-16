@@ -3,9 +3,10 @@
 
   python3 tools/build.py                 -> preview/oem-sourcing-preview.html (one file, everything inlined)
                                             preview/oem-sourcing-site.zip     (drag-and-drop upload for Cloudflare Pages)
+                                            dist/                              (clean folder to deploy: index.html, fonts, img, _headers)
   python3 tools/build.py --artifact OUT  -> OUT: page fragment for a Claude artifact (fonts inlined, photos stay as files)
 """
-import base64, re, sys, zipfile
+import base64, re, shutil, sys, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -31,12 +32,36 @@ def build_preview():
     print(out.relative_to(ROOT), out.stat().st_size // 1024, "KB")
 
 
+HEADERS = """/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/img/*
+  Cache-Control: public, max-age=2592000
+"""
+
+
+def build_dist():
+    dist = ROOT / "dist"
+    if dist.exists():
+        shutil.rmtree(dist)
+    dist.mkdir()
+    shutil.copy(ROOT / "index.html", dist / "index.html")
+    for d in ("fonts", "img"):
+        shutil.copytree(ROOT / d, dist / d)
+    (dist / "_headers").write_text(HEADERS, encoding="utf-8")
+    print("dist/", sum(1 for p in dist.rglob("*") if p.is_file()), "files")
+    return dist
+
+
 def build_zip():
+    dist = build_dist()
     out = ROOT / "preview" / "oem-sourcing-site.zip"
-    files = ["index.html"] + sorted(str(p.relative_to(ROOT)) for d in ("fonts", "img") for p in (ROOT / d).glob("*") if p.is_file())
+    files = sorted(p for p in dist.rglob("*") if p.is_file())
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for f in files:
-            z.write(ROOT / f, f)
+            z.write(f, str(f.relative_to(dist)))
     print(out.relative_to(ROOT), out.stat().st_size // 1024, "KB,", len(files), "files")
 
 
