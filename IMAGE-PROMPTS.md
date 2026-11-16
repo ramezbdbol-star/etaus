@@ -1,5 +1,12 @@
 # Image brief: OEM Sourcing Ltd website
 
+**Status: done.** All 12 images were generated. The six in `img/` are live on the site (hero-A, sourcing-A,
+inspection-A, interpreting-B, logistics-A, guangzhou-A). The other six are kept in `img-candidates/` as WebP
+(`hero-b`, `sourcing-b`, `inspection-b`, `interpreting-a`, `logistics-b`, `guangzhou-b`) so any of them can be swapped in
+by copying it to `img/` under the live name (for example `img-candidates/hero-b.webp` to `img/hero.webp`).
+
+The rest of this file is the original brief, kept as a record of the prompts used.
+
 **For the agent that generates the images. Do everything in this file, in order.**
 
 The site is a one-page website for OEM Sourcing Ltd, a purchasing agency in Guangzhou, China. It helps small

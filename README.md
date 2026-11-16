@@ -12,7 +12,9 @@ Plain HTML, CSS and JavaScript. No build step, no dependencies.
 | Path | What it is |
 | --- | --- |
 | `index.html` | The whole site (markup, styles, script, translations) |
-| `img/` | Photos. See `IMAGE-PROMPTS.md` for the file names and prompts |
+| `img/` | The six live photos (WebP) |
+| `img-candidates/` | The six unused alternatives, ready to swap in |
+| `IMAGE-PROMPTS.md` | The prompts the photos were generated from |
 
 ## Run it locally
 
