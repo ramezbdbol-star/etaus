@@ -4,6 +4,7 @@
   python3 tools/build.py                 -> preview/oem-sourcing-preview.html (one file, everything inlined)
                                             preview/oem-sourcing-site.zip     (drag-and-drop upload for Cloudflare Pages)
                                             dist/                              (clean folder to deploy: index.html, fonts, img, _headers)
+                                            preview/OEM-Sourcing-handover.zip  (one package for the site owner: read-me, preview, upload zip)
   python3 tools/build.py --artifact OUT  -> OUT: page fragment for a Claude artifact (fonts inlined, photos stay as files)
 """
 import base64, re, shutil, sys, zipfile
@@ -65,6 +66,19 @@ def build_zip():
     print(out.relative_to(ROOT), out.stat().st_size // 1024, "KB,", len(files), "files")
 
 
+def build_handover():
+    out = ROOT / "preview" / "OEM-Sourcing-handover.zip"
+    parts = [
+        (ROOT / "handover" / "READ-ME-FIRST.md", "READ-ME-FIRST.md"),
+        (ROOT / "preview" / "oem-sourcing-preview.html", "oem-sourcing-preview.html"),
+        (ROOT / "preview" / "oem-sourcing-site.zip", "oem-sourcing-site.zip"),
+    ]
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+        for src, name in parts:
+            z.write(src, "OEM-Sourcing-handover/" + name)
+    print(out.relative_to(ROOT), out.stat().st_size // 1024, "KB")
+
+
 def build_artifact(dest):
     s = inline_fonts(HTML)
     s = re.sub(r"<!doctype html>\s*", "", s, flags=re.I)
@@ -83,3 +97,4 @@ if __name__ == "__main__":
     else:
         build_preview()
         build_zip()
+        build_handover()
